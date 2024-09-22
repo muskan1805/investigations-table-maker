@@ -12,6 +12,7 @@ from investigations import create_patient_document
 from st_audiorec import st_audiorec
 import whisper
 import time
+import io
 
 
 ASSISTANT_ID = "asst_wTfRitYZNaIGHByiYw2SmQrn"
