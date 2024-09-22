@@ -2,4 +2,6 @@ streamlit
 openai
 python-docx
 st-audiorec
-whisper
+openai-whisper
+torch torchvision torchaudio
+
