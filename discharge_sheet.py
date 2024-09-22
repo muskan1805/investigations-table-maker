@@ -100,23 +100,25 @@ if wav_audio_data:
 
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
-    final_transcription = None
+    if 'final_transcription' not in st.session_state:
+    st.session_state.final_transcription = None
+    
     # Proceed button
     if st.button("Proceed"):
         # Merge transcription with additional text
-        final_transcription = transcription_text + " " + additional_text.strip()
+        st.session_state.final_transcription = transcription_text + " " + additional_text.strip()
         
-        st.write("Final Input Data: ", final_transcription)
+        st.write("Final Input Data: ", st.session_state.final_transcription)
     
 # st.session_state.final_input_data = final_transcription
 
 
-if final_transcription:
+if st.session_state.final_transcription:
     thread = client.beta.threads.create(
     messages=[
         {
           "role": "user",
-          "content": final_transcription
+          "content": st.session_state.final_transcription
           
         }
       ]
