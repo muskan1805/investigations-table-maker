@@ -102,7 +102,7 @@ if st.button("Reset App"):
 
 # Audio recording component
 wav_audio_data = st_audiorec()
-
+final_transcription = None
 if wav_audio_data:
     file_path = 'save_recorded_audio.wav'
     
@@ -132,7 +132,7 @@ if wav_audio_data:
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
     
-    final_transcription = None
+    
     
     # Proceed button
     if st.button("Proceed"):
