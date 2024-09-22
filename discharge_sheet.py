@@ -101,7 +101,8 @@ if wav_audio_data:
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
     if 'final_transcription' not in st.session_state:
-    st.session_state.final_transcription = None
+        st.session_state.final_transcription = None
+    
     
     # Proceed button
     if st.button("Proceed"):
