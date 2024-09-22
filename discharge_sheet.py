@@ -69,56 +69,41 @@ if 'text_received' not in st.session_state:
 
 st.title("Input Investigations/Medications/Advises:")
 
-text = speech_to_text(language='en', use_container_width=True, just_once=True, key='STT')
 
-# If text is captured from speech-to-text, store it
-if text:
-    st.session_state.text_received.append(text)
+# Audio recording component
+wav_audio_data = st_audiorec()
 
-# Display all transcriptions received
-for received_text in st.session_state.text_received:
-    st.write(received_text)
-
-# Placeholder for text input if the user wants to add more details manually
-additional_input = st.text_input("Add any missing text here (optional):", "")
-
-final_transcription = None
-
-st.markdown("""
-            <style>
-            div.stButton > button:first-child {
-                background-color: white;
-                color: black;
-                height: 3em;
-                width: 12em;
-                border-radius:10px;
-                border:3px solid #000000;
-                font-size: 20px;
-                font-weight: bold;
-                margin: auto;
-                display: block;
-            }
-
-            div.stButton > button:hover {
-                background: linear-gradient(to bottom, #ffcccc 5%, #ff9999 100%);
-                background-color: #ffcccc;
-            }
-
-            div.stButton > button:active {
-                position:relative;
-                top:3px;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-
-# Button to proceed with the transcription process
-if st.button("Proceed"):
-    # Merge all received transcriptions with the additional text
-    final_transcription = " ".join(st.session_state.text_received) + " " + additional_input
+if wav_audio_data:
+    file_path = 'save_recorded_audio.wav'
     
-    st.session_state.final_input_data=final_transcription
-    st.write("Final Input Data:")
-    st.write(final_transcription)
+    # Save the audio file as .wav
+    with open(file_path, "wb") as f:
+        f.write(wav_audio_data)
+    
+    st.success(f"WAV file saved successfully as {file_path}")
+
+    # Load the 'tiny' model to ensure compatibility with Streamlit Cloud
+    model = whisper.load_model("tiny")
+
+    # Transcribe the recorded audio
+    start = time.time()
+    result = model.transcribe(file_path)
+    end = time.time()
+    
+    st.write("Transcription time: ", end - start)
+
+    # Show the transcription result
+    transcription_text = result['text']
+    st.write("Transcribed Text: ", transcription_text)
+
+    # Text input for additional content
+    additional_text = st.text_input("If you have anything else to add, type it here:")
+
+    # Proceed button
+    if st.button("Proceed"):
+        # Merge transcription with additional text
+        final_transcription = transcription_text + " " + additional_text.strip()
+        st.write("Final Input Data: ", final_transcription)
     
 st.session_state.final_input_data = final_transcription
 
