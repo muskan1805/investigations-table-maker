@@ -110,7 +110,7 @@ if wav_audio_data:
     with open(file_path, "wb") as f:
         f.write(wav_audio_data)
     
-    # st.success(f"WAV file saved successfully as {file_path}")
+    st.success(f"WAV file saved successfully as {file_path}")
 
     # Load the 'tiny' model to ensure compatibility with Streamlit Cloud
     model = whisper.load_model("tiny")
