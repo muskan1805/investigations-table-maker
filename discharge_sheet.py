@@ -106,7 +106,7 @@ wav_audio_data = st_audiorec()
 
 if wav_audio_data:
     file_path = 'save_recorded_audio.mp3'
-    audio_buffer = io.BytesIO(wav_audio_data)
+    #audio_buffer = io.BytesIO(wav_audio_data)
     
     # Save the audio file as .wav
     with open(file_path, "wb") as f:
