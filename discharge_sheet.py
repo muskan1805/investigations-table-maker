@@ -100,7 +100,7 @@ if wav_audio_data:
 
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
-
+    final_transcription = None
     # Proceed button
     if st.button("Proceed"):
         # Merge transcription with additional text
