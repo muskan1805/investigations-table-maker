@@ -108,7 +108,7 @@ if wav_audio_data:
         st.session_state.final_input_data=final_transcription
         st.write("Final Input Data: ", final_transcription)
     
-st.session_state.final_input_data = final_transcription
+# st.session_state.final_input_data = final_transcription
 
 
 if final_transcription:
