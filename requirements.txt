@@ -1,4 +1,5 @@
 streamlit
 openai
-streamlit-mic-recorder
 python-docx
+st-audiorec
+whisper
