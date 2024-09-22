@@ -9,7 +9,9 @@ import re
 #from streamlit_markmap import markmap
 import json
 from investigations import create_patient_document
-from streamlit_mic_recorder import mic_recorder, speech_to_text
+from st_audiorec import st_audiorec
+import whisper
+import time
 
 
 ASSISTANT_ID = "asst_wTfRitYZNaIGHByiYw2SmQrn"
