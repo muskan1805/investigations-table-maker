@@ -3,5 +3,5 @@ openai
 python-docx
 st-audiorec
 openai-whisper
-torch torchvision torchaudio
+
 
