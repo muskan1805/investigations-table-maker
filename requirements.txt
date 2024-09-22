@@ -3,5 +3,5 @@ openai
 python-docx
 streamlit-audiorec
 whisper
-
+numpy==2.0
 
