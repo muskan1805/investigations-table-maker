@@ -84,21 +84,24 @@ if wav_audio_data:
     with open(file_path, "wb") as f:
         f.write(wav_audio_data)
     
-    st.success(f"WAV file saved successfully as {file_path}")
+    # st.success(f"WAV file saved successfully as {file_path}")
 
     # Load the 'tiny' model to ensure compatibility with Streamlit Cloud
     model = whisper.load_model("tiny")
 
     # Transcribe the recorded audio
     start = time.time()
+   
+    
+        
     result = model.transcribe(file_path)
     end = time.time()
     
-    st.write("Transcription time: ", end - start)
+    # st.write("Transcription time: ", end - start)
 
     # Show the transcription result
     transcription_text = result['text']
-    st.write("Transcribed Text: ", transcription_text)
+    st.write("Input Audio Data: ", transcription_text)
 
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
@@ -150,7 +153,7 @@ if st.session_state.final_transcription:
     
         # Update the progress bar and status text
         progress_bar.progress(progress)
-        status_text.text(f"Digging in ...")
+        status_text.text(f"Generating Investigations/Advisory Table ...")
     
         # Simulate the check by retrieving the run status again
         run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
