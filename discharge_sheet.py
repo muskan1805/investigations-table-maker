@@ -132,19 +132,20 @@ if wav_audio_data:
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
     
-    
+    final_transcription = None
     
     # Proceed button
     if st.button("Proceed"):
         # Merge transcription with additional text
-        st.session_state.final_transcription = transcription_text + " " + additional_text.strip()
+        final_transcription = transcription_text + " " + additional_text.strip()
+        st.session_state.final_transcription = final_transcription
         
         st.write("Final Input Data: ", st.session_state.final_transcription)
     
 # st.session_state.final_input_data = final_transcription
 
 
-if st.session_state.final_transcription:
+if final_transcription:
     thread = client.beta.threads.create(
     messages=[
         {
@@ -226,7 +227,7 @@ if st.session_state.final_transcription:
             # Convert the extracted string to a Python dictionary using ast.literal_eval
             investigations_dict = ast.literal_eval(investigations_str)
             st.session_state.investigations_dict = investigations_dict
-            #st.write(investigations_dict)
+            st.write(investigations_dict)
         
             
         except (SyntaxError, ValueError) as e:
@@ -260,7 +261,7 @@ if st.session_state.final_transcription:
             # Load the string as a JSON-compatible dictionary
             advise_dict = json.loads(advise_str)
             st.session_state.advise_dict = advise_dict
-            #st.write(advise_dict)
+            st.write(advise_dict)
             
         except json.JSONDecodeError as e:
             st.write(f"Error parsing dictionary: {e}")
