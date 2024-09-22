@@ -2,6 +2,6 @@ streamlit
 openai
 python-docx
 streamlit-audiorec
-openai-whisper
+whisper
 
 
