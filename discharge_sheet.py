@@ -52,8 +52,7 @@ st.markdown('<p></p>', unsafe_allow_html=True)
 st.markdown('<p></p>', unsafe_allow_html=True)
 st.markdown('<p></p>', unsafe_allow_html=True)
 
-if st.button("Reset App"):
-    st.session_state.clear()
+
 
 
 # Initialize session state
@@ -72,7 +71,34 @@ if 'final_transcription' not in st.session_state:
 
 
 st.title("Input Investigations/Medications/Advises:")
+st.markdown("""
+            <style>
+            div.stButton > button:first-child {
+                background-color: white;
+                color: black;
+                height: 3em;
+                width: 12em;
+                border-radius:10px;
+                border:3px solid #000000;
+                font-size: 20px;
+                font-weight: bold;
+                margin: auto;
+                display: block;
+            }
 
+            div.stButton > button:hover {
+                background: linear-gradient(to bottom, #ffcccc 5%, #ff9999 100%);
+                background-color: #ffcccc;
+            }
+
+            div.stButton > button:active {
+                position:relative;
+                top:3px;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+if st.button("Reset App"):
+    st.session_state.clear()
 
 # Audio recording component
 wav_audio_data = st_audiorec()
