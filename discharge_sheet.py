@@ -105,12 +105,13 @@ wav_audio_data = st_audiorec()
 
 if wav_audio_data:
     file_path = 'save_recorded_audio.wav'
+    audio_buffer = io.BytesIO(wav_audio_data)
     
     # Save the audio file as .wav
-    with open(file_path, "wb") as f:
-        f.write(wav_audio_data)
+    # with open(file_path, "wb") as f:
+    #     f.write(wav_audio_data)
     
-    st.success(f"WAV file saved successfully as {file_path}")
+    #st.success(f"WAV file saved successfully as {file_path}")
 
     # Load the 'tiny' model to ensure compatibility with Streamlit Cloud
     model = whisper.load_model("tiny")
@@ -120,10 +121,10 @@ if wav_audio_data:
    
     
         
-    result = model.transcribe(file_path)
+    result = model.transcribe(audio_buffer)
     end = time.time()
     
-    # st.write("Transcription time: ", end - start)
+    st.write("Transcription time: ", end - start)
 
     # Show the transcription result
     transcription_text = result['text']
