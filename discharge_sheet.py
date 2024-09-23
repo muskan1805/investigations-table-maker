@@ -12,7 +12,9 @@ from investigations import create_patient_document
 from st_audiorec import st_audiorec
 import whisper
 import time
-import io
+from audiorecorder import audiorecorder
+
+
 
 
 ASSISTANT_ID = "asst_wTfRitYZNaIGHByiYw2SmQrn"
@@ -101,35 +103,34 @@ st.markdown("""
 if st.button("Reset App"):
     st.session_state.clear()
 
-# Audio recording component
-wav_audio_data = st_audiorec()
 
-if wav_audio_data:
-    file_path = 'save_recorded_audio.mp3'
-    #audio_buffer = io.BytesIO(wav_audio_data)
-    
-    # Save the audio file as .wav
-    with open(file_path, "wb") as f:
-        f.write(wav_audio_data)
-    
-    st.success(f"WAV file saved successfully as {file_path}")
+final_transcription = None
 
-    # Load the 'tiny' model to ensure compatibility with Streamlit Cloud
+audio = audiorecorder("Click to record", "Click to stop recording")
+if len(audio) > 0:
+    # To play audio in frontend:
+    st.audio(audio.export().read())  
+
+uploaded_audio = st.file_uploader("Upload an audio file", type=['mp3', 'wav', 'ogg'])
+if uploaded_audio:
+    # file_path = os.path.join("tempDir", uploaded_audio.name)  # You can customize the directory
+    
+    # # Ensure the directory exists
+    # os.makedirs("tempDir", exist_ok=True)
+    
+    # # Write the file to the temporary directory
+    # with open(file_path, "wb") as f:
+    #     f.write(uploaded_audio.getbuffer())
+    
+
     model = whisper.load_model("tiny")
+    transcription_text = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=uploaded_audio,
+        response_format="text"
+    )
 
-    # Transcribe the recorded audio
-    start = time.time()
-   
-    
-        
-    result = model.transcribe(file_path)
-    end = time.time()
-    
-    st.write("Transcription time: ", end - start)
-
-    # Show the transcription result
-    transcription_text = result['text']
-    st.write("Input Audio Data: ", transcription_text)
+  
 
     # Text input for additional content
     additional_text = st.text_input("If you have anything else to add, type it here:")
@@ -139,14 +140,13 @@ if wav_audio_data:
     # Proceed button
     if st.button("Proceed"):
         # Merge transcription with additional text
-        st.session_state.final_transcription = transcription_text + " " + additional_text.strip()
+        final_transcription = transcription_text + " " + additional_text.strip()
+        st.session_state.final_transcription = final_transcription
         
-        st.write("Final Input Data: ", st.session_state.final_transcription)
+        #st.write("Final Input Data: ", st.session_state.final_transcription)
     
 # st.session_state.final_input_data = final_transcription
-
-
-if st.session_state.final_transcription:
+if final_transcription:
     thread = client.beta.threads.create(
     messages=[
         {
@@ -228,7 +228,7 @@ if st.session_state.final_transcription:
             # Convert the extracted string to a Python dictionary using ast.literal_eval
             investigations_dict = ast.literal_eval(investigations_str)
             st.session_state.investigations_dict = investigations_dict
-            #st.write(investigations_dict)
+            st.write(investigations_dict)
         
             
         except (SyntaxError, ValueError) as e:
@@ -244,7 +244,7 @@ if st.session_state.final_transcription:
     
     
         # Find the starting position and extract from the opening { till the closing }
-        start_pos = start_match.end() - 1  # Start from the opening brace `{`
+        start_pos = start_match.end() - 1  # Start from the opening brace {
         
         # Find the closing brace for advise_example
         end_pos = input_string.find('}', start_pos) + 1  # The closing } that matches the opening one
@@ -262,7 +262,7 @@ if st.session_state.final_transcription:
             # Load the string as a JSON-compatible dictionary
             advise_dict = json.loads(advise_str)
             st.session_state.advise_dict = advise_dict
-            #st.write(advise_dict)
+            st.write(advise_dict)
             
         except json.JSONDecodeError as e:
             st.write(f"Error parsing dictionary: {e}")
